@@ -1,0 +1,46 @@
+#Contiki Defines
+$(info OS value $(OS))
+#For contiki verbose build
+V = 1 
+
+#Project defines
+#For adding invokers to contiki build.
+#WITH_INVOKERS = 1
+
+#build type - Debug or release build.
+
+#DEBUG = 1
+
+ifndef DEBUG
+RELEASE = 1
+endif #DEBUG
+
+#BUILD_FROM_SOURCE = 1
+ifndef BUILD_FROM_SOURCE
+LINK_EXISTING_LIB = 1
+endif #BUILD_FROM_SOURCE
+
+#Directory information
+#uscxml source directory
+USCXML_DIR = dependencies/uscxml/include/uscxml
+
+ifdef BUILD_FROM_SOURCE
+#uscxml build directory
+USCXML_BUILD_DIR = $(USCXML_DIR)/build
+else
+USCXML_BUILD_DIR = dependencies
+USCXML_CONFIG_DIR = dependencies/uscxml/include
+endif #BUILD_FROM_SOURCE
+
+
+ifdef LINK_EXISTING_LIB
+ifeq ($(OS),Windows_NT)
+ifdef DEBUG
+USCXML_LIB_LOCATION = dependencies/uscxml/lib/uscxml/windows/debug
+else
+USCXML_LIB_LOCATION = dependencies/uscxml/lib/uscxml/windows/release
+endif #DEBUG
+endif #($(OS),Windows_NT)
+else
+USCXML_LIB_LOCATION = dependencies/uscxml/lib/uscxml/unix
+endif #LINK_EXISTING_LIB

@@ -1,0 +1,106 @@
+#------------------------USCXML Project  directories-----------------------------------------------------------
+#USCXML_DIR = dependencies/includes/uscxml
+
+USCXML_SRC_DIR = $(USCXML_DIR)/src/
+
+
+USCXML_EXTERNAL_BUILD = $(USCXML_BUILD_DIR)
+
+ifdef BUILD_FROM_SOURCE
+EXTERNAL_DEPS = $(USCXML_EXTERNAL_BUILD)/deps
+else
+EXTERNAL_DEPS = $(USCXML_EXTERNAL_BUILD)
+endif #BUILD_FROM_SOURCE
+
+USCXML_CONTRIB_SRC_DIR = $(USCXML_DIR)/contrib/src
+
+USCXML_EVWS_CONTRIB_SRC_DIR = $(USCXML_CONTRIB_SRC_DIR)/evws 
+
+USCXML_JSMN_CONTRIB_SRC_DIR = $(USCXML_CONTRIB_SRC_DIR)/jsmn 
+
+USCXML_DEPS_XERCES_INCLUDE = $(EXTERNAL_DEPS)/xerces-c/include
+
+USCXML_DEPS_LIBCURL_INCLUDE = $(EXTERNAL_DEPS)/libcurl/include 
+
+USCXML_DEPS_LIBEVENT_INCLUDE = $(EXTERNAL_DEPS)/libevent/include 
+
+USCXML_DEPS_URIPARSER_INCLUDE = $(EXTERNAL_DEPS)/uriparser/include
+
+#------------------------USCXML Project  directories End-----------------------------------------------------------
+
+#------------------------USCXML source files ----------------------------------------------------------------------
+ifdef BUILD_FROM_SOURCE
+include Makefile.sourceFiles
+
+PROJECTDIRS += $(USCXML_DIR) $(USCXML_DIR)/src/uscxml/interpreter $(USCXML_DIR)/src/uscxml/util $(USCXML_DIR)/src/uscxml/messages $(USCXML_DIR)/src/uscxml/plugins $(USCXML_DIR)/src/uscxml/plugins/datamodel/null $(USCXML_DIR)/src/uscxml/plugins/datamodel/promela $(USCXML_DIR)/src/uscxml/plugins/datamodel/promela/parser $(USCXML_DIR)/src/uscxml/plugins/ioprocessor/scxml $(USCXML_DIR)/src/uscxml/plugins/ioprocessor/basichttp $(USCXML_DIR)/src/uscxml/plugins/invoker/dirmon $(USCXML_DIR)/src/uscxml/plugins/invoker/scxml $(USCXML_EVWS_CONTRIB_SRC_DIR) $(USCXML_JSMN_CONTRIB_SRC_DIR) $(USCXML_CONTRIB_SRC_DIR)/uriparser/src $(USCXML_CONTRIB_SRC_DIR)/uriparser/include $(USCXML_DIR)/src/uscxml/interpreter $(USCXML_DIR)/src/uscxml/server $(USCXML_DIR)/src/uscxml  $(USCXML_DIR)/src/uscxml/debug ./Invokers $(USCXML_DIR)/src/uscxml/plugins/invoker/contiki
+
+PROJECT_SOURCEFILES += $(USCXML_SRC_FILES)
+
+else
+
+ifeq ($(OS),Windows_NT)
+USCXML_LIB = ${addprefix /LIBPATH:, "$(USCXML_LIB_LOCATION)"} uscxml.lib
+else
+USCXML_LIB = -L$(USCXML_LIB_LOCATION) -uscxml
+endif #($(OS),Windows_NT)
+Additional_PROJECT_LIB += $(USCXML_LIB)
+endif #BUILD_FROM_SOURCE
+#------------------------USCXML source files End-------------------------------------------------------------------
+
+#------------------------USCXML Project includes required for building --------------------------------------------
+
+ADDITIONAL_INCLUDE_PROJECTDIRS = $(USCXML_CONFIG_DIR) $(USCXML_CONTRIB_SRC_DIR) $(USCXML_EVWS_CONTRIB_SRC_DIR) $(USCXML_JSMN_CONTRIB_SRC_DIR) $(USCXML_SRC_DIR) $(USCXML_EXTERNAL_BUILD) $(USCXML_DEPS_XERCES_INCLUDE) $(USCXML_DEPS_LIBCURL_INCLUDE) $(USCXML_DEPS_LIBEVENT_INCLUDE) $(USCXML_DEPS_URIPARSER_INCLUDE)
+#C:/Puneet/softwares/AtmelStudio/7.0/toolchain/avr8/avr8-gnu-toolchain/avr/include
+#C:/Puneet/softwares/AtmelStudio/7.0/toolchain/arm/arm-gnu-toolchain/arm-none-eabi/include/c++/4.9.3/arm-none-eabi/thumb #C:/Puneet/softwares/AtmelStudio/7.0/toolchain/arm/arm-gnu-toolchain/arm-none-eabi/include/c++/4.9.3 #C:/Puneet/softwares/AtmelStudio/7.0/toolchain/arm/arm-gnu-toolchain/arm-none-eabi/include
+#C:\Puneet\softwares\AtmelStudio\7.0\toolchain\avr32\avr32-gnu-toolchain\lib\gcc\avr32\4.4.7\include\c++
+
+#------------------------USCXML Project includes required for building End------------------------------------------
+
+#-----------------------USCXML Project Libraries---------------------------------------------------------------				 
+ifeq ($(OS),Windows_NT)
+ifdef DEBUG
+XERCES_LIB = ${addprefix /LIBPATH:, "$(EXTERNAL_DEPS)/xerces-c/lib"} xerces-c_3_1D.lib
+LIBEVENT_LIB = ${addprefix /LIBPATH:, $(EXTERNAL_DEPS)/libevent/lib} libevent.lib
+LIBCURL_LIB = ${addprefix /LIBPATH:, $(EXTERNAL_DEPS)/libcurl/lib} libcurl_a.lib
+# UriParser dependency removed in latest build for uSCXML project
+#URIPARSER_LIB = ${addprefix /LIBPATH:, $(EXTERNAL_DEPS)/uriparser/lib} uriparser.lib
+
+else
+
+XERCES_LIB = ${addprefix /LIBPATH:, "$(EXTERNAL_DEPS)/xerces-c/lib"} xerces-c_3.lib
+LIBEVENT_LIB = ${addprefix /LIBPATH:, $(EXTERNAL_DEPS)/libevent/lib} libevent.lib
+LIBCURL_LIB = ${addprefix /LIBPATH:, $(EXTERNAL_DEPS)/libcurl/lib} libcurl_a.lib
+# UriParser dependency removed in latest build for uSCXML project
+#URIPARSER_LIB = ${addprefix /LIBPATH:, $(EXTERNAL_DEPS)/uriparser/lib} uriparser.lib
+
+endif
+else
+
+XERCES_LIB = -L$(EXTERNAL_DEPS)/xerces-c/lib -lxerces-c
+
+LIBEVENT_LIB = -L$(EXTERNAL_DEPS)/libevent/lib -levent -levent_pthreads
+
+LIBCURL_LIB = -L$(EXTERNAL_DEPS)/libcurl/lib -lcurl
+
+# UriParser dependency removed in latest build for uSCXML project
+#URIPARSER_LIB = -L$(EXTERNAL_DEPS)/uriparser/lib -luriparser
+
+endif
+
+Additional_PROJECT_LIB += $(XERCES_LIB) $(LIBEVENT_LIB) \
+$(LIBCURL_LIB)
+
+TARGET_LIBFILES += $(Additional_PROJECT_LIB)
+#-----------------------USCXML Project Libraries End---------------------------------------------------------------
+
+#-----------------------Additional System Libraries----------------------------------------------------------				 
+ifeq ($(OS),Windows_NT)
+
+#Following libraries are required for contiki build for TARGET=win32
+Additional_SYSTEM_LIB = Shell32.lib wsock32.lib
+#user32.lib ws2_32.lib iphlpapi.lib 
+
+TARGET_LIBFILES += $(Additional_SYSTEM_LIB)
+endif
+
+#-----------------------Additional System Libraries End----------------------------------------------------------

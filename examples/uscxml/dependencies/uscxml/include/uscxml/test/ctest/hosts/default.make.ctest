@@ -1,0 +1,24 @@
+if (NOT HOSTNAME)
+	set(HOSTNAME "Unknown Host")
+endif()
+
+set(CTEST_CMAKE_GENERATOR "Unix Makefiles")
+set(CTEST_SITE "${HOSTNAME}")
+set(CTEST_BUILD_CONFIGURATION "Debug")
+set(CTEST_BUILD_NAME "${CMAKE_SYSTEM}")
+
+set(RETAIN_BUILD_DIR OFF)
+include("tests/general.ctest")
+include("common.ctest.inc")
+
+set(RETAIN_BUILD_DIR ON)
+include("tests/ecma.ctest")
+include("common.ctest.inc")
+
+set(RETAIN_BUILD_DIR ON)
+include("tests/xpath.ctest")
+include("common.ctest.inc")
+
+set(RETAIN_BUILD_DIR OFF)
+include("tests/plugins-ecma.ctest")
+include("common.ctest.inc")
