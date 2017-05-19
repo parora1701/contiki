@@ -48,4 +48,4 @@ CFLAGS +=  -DUSCXML_STATIC -DCURL_STATICLIB -DXERCES_STATIC_LIBRARY -DNDEBUG ${a
 endif #VCINSTALLDIR endif
 
 CONTIKI = ../..
-include $(CONTIKI)/MakefileCustom.include
+include $(CONTIKI)/MakefileUSCXML.include
