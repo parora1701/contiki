@@ -1,4 +1,4 @@
-*.a
+#*.a
 *.bin
 *.map
 *.png
@@ -74,7 +74,7 @@ contiki-cc2530dk.lib
 # VC++ build artifacts
 *.exp
 *.ilk
-*.lib
+#*.lib
 *.pdb
 *.prg
 *.dsc
