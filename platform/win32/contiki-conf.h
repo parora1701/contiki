@@ -24,7 +24,9 @@ int strncasecmp(const char*, const char*, size_t);
 char* strdup(const char*);
 #else /* __CYGWIN__ */
 #define HAVE_SNPRINTF
-#define snprintf    _snprintf
+#if _MSC_VER &lt; 1900 
+#define snprintf _snprintf
+#endif
 #define strcasecmp  _stricmp
 #define strncasecmp _strnicmp
 #define strdup      _strdup
